@@ -5,19 +5,19 @@ Website that allows users to view analytics data on an IP address. This project 
 
 Users can enter an IP address
 
-<img src="images/main_page.png" width=500>
+<img src="images/main_page.png" width=700>
 
 Basic information about the IP as well as Information about the ASN prefixes are displayed
 
-<img src="images/main_page2.png" width=500>
+<img src="images/main_page2.png" width=700>
 
 The IP addresses of each ASN object can be viewed in more detail
 
-<img src="images/main_page3.png" width=500>
+<img src="images/main_page3.png" width=700>
 
 Walkthrough gif
 
-<img src="images/demo.gif" width=600>
+<img src="images/demo.gif" width=800>
 
 # Getting Started
 ## Installation - Backend
