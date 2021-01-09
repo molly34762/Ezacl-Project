@@ -1,0 +1,173 @@
+<section class="container">
+    <div class="main_header">
+        <h1>Ezacl Project</h1>
+    </div>
+
+    <!-------------------- User Input Section -------------------->
+    <div class="row section">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <div class="card">
+                <form class="user_form">
+                    <div class="form-group" [class.has-error]="ip_address_control.invalid && ip_address_control.touched"
+                        [class.has-success]="ip_address_control.valid">
+                        <label for="ip_address">Enter IP address</label>
+                        <input type="text" class="form-control" name="ip_address" id="ip_address" required
+                            [(ngModel)]="ip_address" #ip_address_control="ngModel">
+                        <span class="help-block" *ngIf="ip_address_control.invalid && ip_address_control.touched">
+                            IP address is required
+                        </span>
+                    </div>
+                    <button (click)="get_information()" class="btn btn-success">Submit</button>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+    <!-------------------- Basic IP Information -------------------->
+    <div class="row section">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header p-1 bg-light">
+                    Basic IP Information
+                </div>
+                <div class="card-body" *ngIf="domain != 'none'">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <p>IP Address: {{current_ip_address}}</p>
+                            <p>Domain: {{domain}}</p>
+                            <p>Number of Prefixes: {{number_prefixes}}</p>
+                        </div>
+                        <div class="col-md-4">
+                            <p><b>Iana Assigment</b></p>
+                            <p>Assignment Status: {{iana_assignment.assignment_status}}</p>
+                            <p>Description: {{iana_assignment.description}}</p>
+                            <p>Whois Server: {{iana_assignment.whois_server}}</p>
+                            <p>Date Assigned: {{iana_assignment.date_assigned}}</p>
+                        </div>
+                        <div class="col-md-4">
+                            <p><b>Rir Allocation</b></p>
+                            <p>Rir Name: {{rir_allocation.rir_name}}</p>
+                            <p>Prefix: {{rir_allocation.prefix}}</p>
+                            <p>Ip: {{rir_allocation.ip}}</p>
+                            <p>Country Code: {{rir_allocation.country_code}}</p>
+                            <p>Date Allocated: {{rir_allocation.date_allocated}}</p>
+                            <p>Allocation Status: {{rir_allocation.allocation_status}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-------------------- Associated ASN Numbers -------------------->
+    <div class="row section">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header p-1 bg-light">
+                    Associated ASN Numbers
+                </div>
+                <div class="card-body" *ngIf="domain != 'none'">
+                    <table class="card-table table table-bordered m-0">
+                        <thead>
+                            <tr>
+                                <th>ASN Number</th>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Country Code</th>
+                                <th>IPv4 Addresses</th>
+                                <th>IPv6 Addresses</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let prefix of prefix_information; let i=index;">
+                                <td>{{prefix.asn_number}}</td>
+                                <td>{{prefix.asn_name}}</td>
+                                <td>{{prefix.asn_description}}</td>
+                                <td>{{prefix.asn_country_code}}</td>
+                                <td (click)="view_ipv4_prefix(i)" class="ip_address_number">
+                                    {{prefix_details[i]['ipv4_prefixes'].length}}
+                                </td>
+                                <td (click)="view_ipv6_prefix(i)" class="ip_address_number">
+                                    {{prefix_details[i]['ipv6_prefixes'].length}}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-------------------- IPv4 Modal -------------------->
+    <div class="modal" [style.display]="show_ipv4_modal ? 'block' : 'none'">
+        <div class="row prefix_modal">
+            <main id="card" class="col-md-8">
+                <article>
+                    <div class="card-header p-1 bg-light">
+                        IPv4 Addresses
+                        <button type="button" class="close" data-dismiss="modal"
+                            (click)="hide_ipv4_modal()">&times;</button>
+                    </div>
+                    <div class="card-body" class="prefix_details">
+                        <table class="card-table table table-bordered m-0">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th>Prefix</th>
+                                    <th>IP</th>
+                                    <th>Country Code</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let address of ipv4_addresses">
+                                    <td>{{address.name}}</td>
+                                    <td>{{address.description}}</td>
+                                    <td>{{address.prefix}}</td>
+                                    <td>{{address.ip}}</td>
+                                    <td>{{address.country_code}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </article>
+            </main>
+        </div>
+    </div>
+    <!-------------------- IPv6 Modal -------------------->
+    <div class="modal" [style.display]="show_ipv6_modal ? 'block' : 'none'">
+        <div class="row prefix_modal">
+            <main id="card" class="col-md-8">
+                <article>
+                    <div class="card-header p-1 bg-light">
+                        IPv6 Addresses
+                        <button type="button" class="close" data-dismiss="modal"
+                            (click)="hide_ipv6_modal()">&times;</button>
+                    </div>
+                    <div class="card-body" class="prefix_details">
+                        <table class="card-table table table-bordered m-0">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th>Prefix</th>
+                                    <th>IP</th>
+                                    <th>Country Code</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let address of ipv6_addresses">
+                                    <td>{{address.name}}</td>
+                                    <td>{{address.description}}</td>
+                                    <td>{{address.prefix}}</td>
+                                    <td>{{address.ip}}</td>
+                                    <td>{{address.country_code}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </article>
+            </main>
+        </div>
+    </div>
+</section>
